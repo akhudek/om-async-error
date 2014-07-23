@@ -46,10 +46,6 @@
       (dom/div nil
         (dom/button #js {:onClick #(om/update-state! owner :visible not)}
                     "Toggle Form")
-        ;; Warning: you might think that putting (chan) directly in the opts
-        ;; would work, however, it doesn't. It's possible for base to rerender
-        ;; which creates a new chan, but my-form is already mounted and so
-        ;; isn't called and doesn't get the new channel.
         (if visible (om/build my-form app {:opts {:dump-chan dump-chan}}))))))
 
 (om/root
