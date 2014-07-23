@@ -2,7 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [cljs.core.async :refer [ <! put! chan]]))
+            [cljs.core.async :refer [<! put! chan alt!]]))
 
 (enable-console-print!)
 
@@ -14,16 +14,19 @@
     om/IInitState
     (init-state [_]
       {:text ""
-       :mounted true})
+       :exit-chan (chan)})
     om/IWillMount
     (will-mount [_]
-      (go (while (om/get-state owner :mounted)
-            (let [v (<! dump-chan)]
-              (.log js/console "dumping state:")
-              (.log js/console (pr-str (om/get-state owner)))))))
+      (go (loop []
+            (let [[v ch] (alts! [dump-chan (om/get-state owner :exit-chan)])]
+              (if (= ch dump-chan)
+                (do
+                  (.log js/console "dumping state:")
+                  (.log js/console (pr-str (om/get-state owner)))
+                  (recur)))))))
     om/IWillUnmount
     (will-unmount [_]
-      (om/set-state! owner :mounted false))
+      (put! (om/get-state owner :exit-chan) true))
     om/IRenderState
     (render-state [_ {:keys [text]}]
       (dom/div nil
