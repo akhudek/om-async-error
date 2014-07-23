@@ -11,13 +11,13 @@ Then open index.html in a browser and open the browsers console.
 The problem can be seen as follows:
 
 1. Toggle the form open. 
-2. Type something into the text box.
-3. Press the dump state button several times.
-4. The console should show the correct state.
-5. Toggle the form closed, then toggle it open again.
-6. Type something different into the text box.
-7. Hit the dump state button several times.
-8. The console randomly flips between showing the correct state and the previous state.
+2. Press the dump button. It works.
+3. Type into the form.
+4. Press the dump button, the channel is broken.
+
+Even though it can be seen that render is not called on base between
+working and not working states. Initializing dump-chan inside the
+state of base fixes this, but why does this happen?
 
 ## License
 

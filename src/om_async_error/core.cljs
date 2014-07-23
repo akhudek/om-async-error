@@ -18,8 +18,7 @@
     (will-mount [_]
       (go (while true
             (let [v (<! dump-chan)]
-              (.log js/console "dumping state:")
-              (.log js/console (pr-str (om/get-state owner)))))))
+              (println "dumping state:" (om/get-state owner))))))
     om/IRenderState
     (render-state [_ {:keys [text]}]
       (dom/div nil
@@ -35,14 +34,14 @@
   (reify
     om/IInitState
     (init-state [_]
-      {:visible false
-       :dump-chan (chan)})
+      {:visible false})
     om/IRenderState
     (render-state [_ {:keys [visible dump-chan]}]
+      (println "rendering base")
       (dom/div nil
         (dom/button #js {:onClick #(om/update-state! owner :visible not)}
                     "Toggle Form")
-        (if visible (om/build my-form app {:opts {:dump-chan dump-chan}}))))))
+        (if visible (om/build my-form app {:opts {:dump-chan (chan)}}))))))
 
 (om/root
   base
