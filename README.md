@@ -19,11 +19,6 @@ The problem can be seen as follows:
 7. Hit the dump state button several times.
 8. The console randomly flips between showing the correct state and the previous state.
 
-A possible secondary issue that I discovered while writing this is that
-if you pass a new channel directly into the opts one line 48, rather than
-the channel created in the state, then as soon as you start typing into
-the text box, the channel silently breaks.
-
 ## License
 
 Copyright © 2014 FIXME

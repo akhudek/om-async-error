@@ -42,9 +42,6 @@
       (dom/div nil
         (dom/button #js {:onClick #(om/update-state! owner :visible not)}
                     "Toggle Form")
-        ;; If I create a new chan here, rather than passing in dump-chan,
-        ;; the Dump State button stops working as soon as you type into the
-        ;; text box.
         (if visible (om/build my-form app {:opts {:dump-chan dump-chan}}))))))
 
 (om/root
